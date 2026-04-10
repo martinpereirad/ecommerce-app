@@ -22,6 +22,7 @@ export interface FilterState {
 export interface CartStore {
   items: CartItem[];
   addItem: (product: Product) => void;
+  addItems: (product: Product, qty: number) => void;
   removeItem: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
