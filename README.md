@@ -1,3 +1,7 @@
+Para el desarrollo de esta solución se utilizaron distintas herramientas IA que dieron soporte a la solución entre ellas:
+- Gemini para el armado de requerimientos y prompting de las bases del proyecto.
+- Cursor como IDE para soporte de IA en el desarrollo. Especificamente utilice los LLM Opus 4.6 y Sonnet 4.6 para la planificacion y ejecución de la estructura base de este proyecto.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
