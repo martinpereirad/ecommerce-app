@@ -1,12 +1,13 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getProductById } from "@/services/products";
 import { useCartStore } from "@/store/cartStore";
 import StarRating from "@/components/ui/StarRating";
 import Spinner from "@/components/ui/Spinner";
+import ProductImage from "@/components/ui/ProductImage";
 import "./page.css";
 
 export default function ProductDetailPage({
@@ -16,7 +17,8 @@ export default function ProductDetailPage({
 }) {
   const { id } = use(params);
   const router = useRouter();
-  const addItem = useCartStore((s) => s.addItem);
+  const addItems = useCartStore((s) => s.addItems);
+  const [quantity, setQuantity] = useState(1);
 
   const {
     data: product,
@@ -40,6 +42,10 @@ export default function ProductDetailPage({
     );
   }
 
+  function handleAdd() {
+    if (product) addItems(product, quantity);
+  }
+
   return (
     <div className="detail">
       <button
@@ -52,7 +58,7 @@ export default function ProductDetailPage({
 
       <div className="detail__content">
         <div className="detail__img-wrapper">
-          <img
+          <ProductImage
             className="detail__img"
             src={product.imagen}
             alt={product.titulo}
@@ -65,12 +71,33 @@ export default function ProductDetailPage({
           <StarRating rating={product.rating} />
           <p className="detail__description">{product.descripcion}</p>
           <p className="detail__price">${product.precio.toFixed(2)}</p>
+
+          <div className="detail__qty-wrapper">
+            <button
+              className="detail__qty-btn"
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              aria-label="Reducir cantidad"
+              disabled={quantity <= 1}
+            >
+              −
+            </button>
+            <span className="detail__qty-value">{quantity}</span>
+            <button
+              className="detail__qty-btn"
+              onClick={() => setQuantity((q) => Math.min(99, q + 1))}
+              aria-label="Aumentar cantidad"
+              disabled={quantity >= 99}
+            >
+              +
+            </button>
+          </div>
+
           <button
             className="detail__add-btn"
-            onClick={() => addItem(product)}
+            onClick={handleAdd}
             data-testid="add-to-cart"
           >
-            Agregar al carrito
+            Agregar {quantity > 1 ? `${quantity} ` : ""}al carrito
           </button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { FilterState } from "@/types";
 import "./Filters.css";
 
@@ -14,72 +15,93 @@ export default function Filters({
   onFilterChange,
   categories,
 }: FiltersProps) {
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
     <aside className="filters" data-testid="filters">
-      <h2 className="filters__title">Filtros</h2>
-
-      <div className="filters__group">
-        <label className="filters__label" htmlFor="search">
-          Buscar
-        </label>
-        <input
-          id="search"
-          type="text"
-          className="filters__input"
-          placeholder="Buscar productos..."
-          value={filters.search}
-          onChange={(e) =>
-            onFilterChange({ ...filters, search: e.target.value })
-          }
-          data-testid="search-input"
-        />
-      </div>
-
-      <div className="filters__group">
-        <label className="filters__label" htmlFor="category">
-          Categoría
-        </label>
-        <select
-          id="category"
-          className="filters__select"
-          value={filters.category}
-          onChange={(e) =>
-            onFilterChange({ ...filters, category: e.target.value })
-          }
-          data-testid="category-select"
+      <div
+        className="filters__header"
+        onClick={() => setCollapsed((c) => !c)}
+        role="button"
+        aria-expanded={!collapsed}
+        aria-controls="filters-body"
+      >
+        <h2 className="filters__title">Filtros</h2>
+        <span
+          className={`filters__chevron ${collapsed ? "filters__chevron--collapsed" : ""}`}
+          aria-hidden="true"
         >
-          <option value="">Todas</option>
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
+          ›
+        </span>
       </div>
 
-      <div className="filters__group">
-        <label className="filters__label" htmlFor="price-range">
-          Precio máximo: ${filters.maxPrice.toFixed(0)}
-        </label>
-        <input
-          id="price-range"
-          type="range"
-          className="filters__range"
-          min={0}
-          max={1300}
-          step={10}
-          value={filters.maxPrice}
-          onChange={(e) =>
-            onFilterChange({
-              ...filters,
-              maxPrice: Number(e.target.value),
-            })
-          }
-          data-testid="price-range"
-        />
-        <div className="filters__range-labels">
-          <span>$0</span>
-          <span>$1300</span>
+      <div
+        id="filters-body"
+        className={`filters__body ${collapsed ? "filters__body--collapsed" : ""}`}
+      >
+        <div className="filters__group">
+          <label className="filters__label" htmlFor="search">
+            Buscar
+          </label>
+          <input
+            id="search"
+            type="text"
+            className="filters__input"
+            placeholder="Buscar productos..."
+            value={filters.search}
+            onChange={(e) =>
+              onFilterChange({ ...filters, search: e.target.value })
+            }
+            data-testid="search-input"
+          />
+        </div>
+
+        <div className="filters__group">
+          <label className="filters__label" htmlFor="category">
+            Categoría
+          </label>
+          <select
+            id="category"
+            className="filters__select"
+            value={filters.category}
+            onChange={(e) =>
+              onFilterChange({ ...filters, category: e.target.value })
+            }
+            data-testid="category-select"
+          >
+            <option value="">Todas</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filters__group">
+          <label className="filters__label" htmlFor="price-range">
+            Precio máximo: ${filters.maxPrice.toFixed(0)}
+          </label>
+          <input
+            id="price-range"
+            type="range"
+            className="filters__range"
+            min={0}
+            max={1300}
+            step={10}
+            value={filters.maxPrice}
+            onChange={(e) =>
+              onFilterChange({
+                ...filters,
+                maxPrice: Number(e.target.value),
+              })
+            }
+            data-testid="price-range"
+          />
+          <div className="filters__range-labels">
+            <span>$0</span>
+            <span>$1300</span>
+          </div>
         </div>
       </div>
     </aside>
